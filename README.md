@@ -8,6 +8,7 @@
   * Final messages depending on line of success OR fail
 * Finish game after success / fail
 * Share message
+* Store game progress and load
 
 # 6 Letters
 * 6letter mode knob + storage
