@@ -1,0 +1,61 @@
+.settingsScreen {
+  padding: 32px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: var(--background-2);
+  z-index: 100;
+}
+
+.heading h3 {
+  margin: 4px 0px 8px;
+}
+
+h4 {
+  margin: 4px 0px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeButton {
+  color: var(--typography-secondary);
+  border: 2px solid var(--typography-secondary);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: var(--typography-secondary-hover);
+  border: 2px solid var(--typography-secondary-hover);
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-low);
+  padding: 0px 0px 8px;
+}

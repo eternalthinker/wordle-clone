@@ -1,0 +1,38 @@
+.keyboardKey {
+  border-radius: 3px;
+  background-color: var(--secondary);
+  color: var(--secondary-fore);
+  font-size: 1em;
+  cursor: pointer;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-basis: 0%;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: none;
+  font-size: 1em;
+  padding: 0px;
+}
+
+.absent {
+  background-color: var(--absent);
+  color: var(--absent-fore);
+}
+
+.misplaced {
+  background-color: var(--misplaced);
+  color: var(--misplaced-fore);
+}
+
+.correct {
+  background-color: var(--correct);
+  color: var(--correct-fore);
+}
+
+.fontSmall {
+  font-size: 0.8em;
+}

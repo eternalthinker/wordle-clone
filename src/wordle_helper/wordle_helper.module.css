@@ -1,0 +1,19 @@
+.wordleHelper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.mainContainer {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.divider {
+  border-bottom: 1px solid var(--border-low);
+  width: 100%;
+  margin: 8px 0px;
+}

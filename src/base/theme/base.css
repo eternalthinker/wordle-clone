@@ -1,0 +1,51 @@
+:root {
+  --typography-primary: #000;
+  --typography-secondary: #aaa;
+  --typography-secondary-hover: #444;
+  --background-1: #fff;
+  --background-2: #fff;
+  --border-low: #ccc;
+  --input: #fff;
+  --input-fore: #000;
+  --input-border-low: rgb(180, 180, 180);
+  --input-border: #333;
+  --primary: #226d9e;
+  --primary-fore: #eee;
+  --secondary: #ddd;
+  --secondary-fore: #000;
+  --tertiary: #b9b9b9;
+  --tertiary-fore: #fcfcfc;
+  --absent: rgb(117, 117, 117);
+  --absent-fore: #eee;
+  --misplaced: #c2b010;
+  --misplaced-fore: #fff;
+  --correct: #37b804;
+  --correct-fore: #fff;
+  --link: #0f448e;
+}
+
+[data-theme="dark"] {
+  --typography-primary: #fff;
+  --typography-secondary: rgb(204, 204, 204);
+  --typography-secondary-hover: rgb(235, 235, 235);
+  --background-1: rgb(29, 29, 29);
+  --background-2: rgb(49, 49, 49);
+  --border-low: rgb(139, 139, 139);
+  --input: rgb(39, 39, 39);
+  --input-fore: #eee;
+  --input-border-low: rgb(110, 110, 110);
+  --input-border: rgb(165, 165, 165);
+  --primary: #4180a9;
+  --primary-fore: #eee;
+  --secondary: rgb(138, 138, 138);
+  --secondary-fore: #eee;
+  --tertiary: rgb(170, 169, 169);
+  --tertiary-fore: #fcfcfc;
+  --absent: rgb(77, 76, 76);
+  --absent-fore: #eee;
+  --misplaced: #c2b010;
+  --misplaced-fore: #fff;
+  --correct: #37b804;
+  --correct-fore: #fff;
+  --link: #5a99f1;
+}

@@ -1,0 +1,51 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--border-low);
+  margin-bottom: 16px;
+  padding: 8px 0px;
+  position: relative;
+  width: 100%;
+}
+
+.header h1 {
+  text-transform: uppercase;
+  font-size: 1.5em;
+  margin: 8px 0px;
+}
+
+.button {
+  color: var(--typography-secondary);
+  border: 2px solid var(--typography-secondary);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1em;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  color: var(--typography-secondary-hover);
+  border: 2px solid var(--typography-secondary-hover);
+}
+
+.helpButton {
+  composes: button;
+  position: absolute;
+  left: 8px;
+}
+
+.settingsButton {
+  composes: button;
+  position: absolute;
+  right: 8px;
+}
