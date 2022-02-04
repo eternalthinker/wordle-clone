@@ -1,17 +1,14 @@
-import { Constraints, LetterStatus } from "./root_state";
+import { LetterStatus } from "./root_state";
 
 export const getLetterStatus = (
   letter: string,
   letterIndex: number,
-  constraints: Constraints
+  solution: string,
 ): LetterStatus => {
-  if (constraints.incorrectPositions[letterIndex].has(letter)) {
-    return "misplaced";
-  }
-  if (constraints.correctPositions[letterIndex] === letter) {
+  if (solution.charAt(letterIndex) === letter) {
     return "correct";
   }
-  if (constraints.includedLetters.has(letter)) {
+  if (solution.includes(letter)) {
     return "misplaced";
   }
   return "absent";

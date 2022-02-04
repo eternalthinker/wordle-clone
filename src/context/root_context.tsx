@@ -1,18 +1,11 @@
 import React from "react";
 import { rootReducer } from "../reducer/root_reducer";
-import { Action, createInitialState, Theme } from "../reducer/root_state";
-import { LocalStorage } from "../utils/local_storage";
+import { Action, createInitialState } from "../reducer/root_state";
 
 export type DispatchType = React.Dispatch<Action>;
 
-const preferDarkTheme = window.matchMedia(
-  "(prefers-color-scheme: dark)"
-).matches;
-const storedTheme: Theme | null = LocalStorage.getItem("theme") as Theme;
-const setDarkTheme = storedTheme === "dark" || preferDarkTheme;
-const currentTheme = setDarkTheme ? "dark" : "light";
-LocalStorage.setItem("theme", currentTheme);
-const initialState = createInitialState({ theme: currentTheme });
+
+const initialState = createInitialState();
 
 export const RootContext = React.createContext({
   state: initialState,

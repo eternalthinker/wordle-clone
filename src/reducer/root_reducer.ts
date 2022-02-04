@@ -1,89 +1,23 @@
 import { LocalStorage } from "../utils/local_storage";
-import { wordList } from "../utils/wordlist";
+import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
 import { getLetterStatus } from "./get_letter_status";
-import { getSuggestedWords } from "./get_suggested_words";
 import {
   RootState,
   Action,
-  initWord,
-  LetterStatus,
   WordLine,
 } from "./root_state";
 
-const getNextStatus = (
-  status: Exclude<LetterStatus, "input">
-): Exclude<LetterStatus, "input"> => {
-  switch (status) {
-    case "absent":
-      return "misplaced";
-    case "misplaced":
-      return "correct";
-    case "correct":
-      return "absent";
-    default:
-      throw new Error(`Invalid Letter status: ${status}`);
-  }
-};
-
 export const rootReducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
-    case "letter_status_change": {
-      const { lineIndex, letterIndex } = action.payload;
-      const wordle = state.wordle;
-      if (wordle.currentInputLine === 6 || wordle.currentInputLetter === 4) {
-        return state;
-      }
-      const currentWordLine = wordle.wordLines[lineIndex];
-      const newStatus = getNextStatus(
-        currentWordLine.word[letterIndex].status as Exclude<
-          LetterStatus,
-          "input"
-        >
-      );
-
-      const wordLines = [
-        ...wordle.wordLines.slice(0, lineIndex),
-        {
-          ...currentWordLine,
-          word: [
-            ...currentWordLine.word.slice(0, letterIndex),
-            {
-              ...currentWordLine.word[letterIndex],
-              status: newStatus,
-            },
-            ...currentWordLine.word.slice(letterIndex + 1),
-          ],
-        },
-        ...wordle.wordLines.slice(lineIndex + 1),
-      ];
-
-      const constraints = getConstraints(wordLines);
-
-      const suggestedWords = getSuggestedWords(
-        wordList,
-        constraints,
-        wordle.currentInputLine
-      );
-
-      return {
-        ...state,
-        wordle: {
-          ...wordle,
-          wordLines,
-        },
-        constraints,
-        suggestedWords,
-      };
-    }
     case "letter_input": {
       const wordle = state.wordle;
-      if (wordle.currentInputLine === 6 || wordle.currentInputLetter === 4) {
+      const { currentInputLine, currentInputLetter } = wordle;
+      if (currentInputLine === 6 || currentInputLetter === 4) {
         return state;
       }
-      const letterIndex = wordle.currentInputLetter + 1;
-      const wordIndex = wordle.currentInputLine;
-      const currentWordLine = wordle.wordLines[wordIndex];
+      const letterIndex = currentInputLetter + 1;
+      const currentWordLine = wordle.wordLines[currentInputLine];
 
       return {
         ...state,
@@ -91,7 +25,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           ...wordle,
           currentInputLetter: letterIndex,
           wordLines: [
-            ...wordle.wordLines.slice(0, wordIndex),
+            ...wordle.wordLines.slice(0, currentInputLine),
             {
               ...currentWordLine,
               word: [
@@ -103,6 +37,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
                 ...currentWordLine.word.slice(letterIndex + 1),
               ],
             },
+            ...wordle.wordLines.slice(currentInputLine+1),
           ],
         },
       };
@@ -133,6 +68,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
                 ...currentWordLine.word.slice(currentInputLetter + 1),
               ],
             },
+            ...wordle.wordLines.slice(currentInputLine+1),
           ],
         },
       };
@@ -143,6 +79,14 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       if (currentInputLine === 6 || currentInputLetter !== 4) {
         return state;
       }
+      let guessWord = "";
+      wordle.wordLines[currentInputLine].word.forEach(letter => {
+        guessWord = guessWord.concat(letter.letter!);
+      })
+      if (!guessSet5Letters.has(guessWord)) {
+        window.alert("That word was not found in the word list!")
+        return state;
+      }
 
       const wordLines: WordLine[] = [
         ...wordle.wordLines.slice(0, currentInputLine),
@@ -150,19 +94,13 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           status: "completed",
           word: wordle.wordLines[currentInputLine].word.map((letter, i) => ({
             ...letter,
-            status: getLetterStatus(letter.letter!, i, state.constraints),
+            status: getLetterStatus(letter.letter!, i, state.wordle.solution),
           })),
         },
-        ...(currentInputLine === 5 ? [] : [initWord]),
+        ...wordle.wordLines.slice(currentInputLine+1),
       ];
 
       const constraints = getConstraints(wordLines);
-
-      const suggestedWords = getSuggestedWords(
-        wordList,
-        constraints,
-        wordle.currentInputLine
-      );
 
       return {
         ...state,
@@ -173,7 +111,6 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           wordLines,
         },
         constraints,
-        suggestedWords,
       };
     }
     case "theme_change": {

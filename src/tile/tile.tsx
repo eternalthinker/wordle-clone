@@ -13,29 +13,6 @@ export const Tile = ({
   row: number;
   col: number;
 }) => {
-  const { dispatch } = React.useContext(RootContext);
-
-  const onStatusChanged = React.useCallback(() => {
-    if (letter.status === "input") {
-      return;
-    }
-    dispatch({
-      type: "letter_status_change",
-      payload: {
-        lineIndex: row,
-        letterIndex: col,
-      },
-    });
-  }, [letter.status, row, col, dispatch]);
-
-  const onClick: MouseEventHandler<HTMLDivElement> = React.useCallback(
-    (e) => {
-      e.preventDefault();
-      onStatusChanged();
-    },
-    [onStatusChanged]
-  );
-
   return (
     <div className={styles.tileContainer}>
       <div
@@ -46,7 +23,6 @@ export const Tile = ({
           [styles.misplaced]: letter.status === "misplaced",
           [styles.correct]: letter.status === "correct",
         })}
-        onClick={onClick}
       >
         {letter.letter}
       </div>
