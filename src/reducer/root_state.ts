@@ -1,3 +1,4 @@
+import { ToastOptions } from "../base/toast/toast";
 import { LocalStorage } from "../utils/local_storage";
 import { solutionSet5Letters } from "../utils/words_5letters";
 
@@ -41,6 +42,7 @@ export type RootState = {
   constraints: Constraints,
   gameMode: GameMode,
   theme: Theme;
+  toasts: ToastOptions[],
 };
 
 export const MAX_SUGGESTED_WORDS = 10;
@@ -90,6 +92,7 @@ export const createInitialState = (): RootState => {
     constraints: createInitConstraints(),
     gameMode,
     theme,
+    toasts: [],
   };
 };
 
@@ -111,4 +114,10 @@ export type Action =
       payload: {
         theme: Theme;
       };
-    };
+    }
+  | {
+    type: "toast_destroy";
+    payload: {
+      id: string;
+    }
+  };

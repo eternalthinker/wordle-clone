@@ -1,6 +1,7 @@
 .toast {
   background-color: var(--toast);
   color: var(--typography-contrast);
+  border-radius: 5px;
   width: 100%;
   margin-bottom: 10px;
   min-height: 50px;
@@ -13,6 +14,7 @@
 }
 
 .content {
+  font-weight: bold;
 }
 
 @keyframes slide-in {

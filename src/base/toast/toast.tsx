@@ -1,25 +1,28 @@
 import React from "react";
 import styles from "./toast.module.css";
 
-export interface ToastProps {
-  id: string;
-  destroy: () => void;
-  content: string;
-  duration?: number;
-}
+export type ToastOptions = {
+  id: string,
+  content: string,
+  duration?: number,
+};
+
+type ToastProps = ToastOptions & {
+  destroy: (id: string) => void,
+};
 
 export const Toast = (props: ToastProps) => {
-  const { destroy, content, duration = 1500 } = props;
+  const { id, destroy, content, duration = 1500 } = props;
 
   React.useEffect(() => {
     if (!duration) return;
 
     const timer = setTimeout(() => {
-      destroy();
+      destroy(id);
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [destroy, duration]);
+  }, [destroy, duration, id]);
 
   return (
     <div className={styles.toast}>

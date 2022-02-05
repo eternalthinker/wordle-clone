@@ -1,4 +1,3 @@
-import { toast } from "../base/toast/toast_manager";
 import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
@@ -78,11 +77,18 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       const wordle = state.wordle;
       const { currentInputLine, currentInputLetter } = wordle;
       if (currentInputLetter !== 4) {
-        toast.show({
-          content: "Not enough letters",
-        });
+        return {
+          ...state,
+          toasts: [
+            {
+              id: Math.random().toString(36).slice(2, 9),
+              content: "Not enough letters",
+            },
+            ...state.toasts,
+          ]
+        }
       }
-      if (currentInputLine === 6 || currentInputLetter !== 4) {
+      if (currentInputLine === 6) {
         return state;
       }
       let guessWord = "";
@@ -90,11 +96,16 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         guessWord = guessWord.concat(letter.letter!);
       })
       if (!guessSet5Letters.has(guessWord)) {
-        toast.show({
-          content: "This word is not present in the word list!",
-        })
-        //window.alert("That word was not found in the word list!")
-        return state;
+        return {
+          ...state,
+          toasts: [
+            {
+              id: Math.random().toString(36).slice(2, 9),
+              content: "This word is not present in the word list!",
+            },
+            ...state.toasts,
+          ]
+        }
       }
 
       const wordLines: WordLine[] = [
@@ -128,6 +139,14 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         ...state,
         theme: action.payload.theme,
       };
+    }
+    case "toast_destroy": {
+      const toasts = state.toasts;
+      const newToasts = toasts.filter(toast => toast.id !== action.payload.id)
+      return {
+        ...state,
+        toasts: newToasts,
+      }
     }
     default: {
       return state;
