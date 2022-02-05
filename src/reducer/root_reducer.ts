@@ -1,3 +1,4 @@
+import { toast } from "../base/toast/toast_manager";
 import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
@@ -76,6 +77,11 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
     case "word_enter": {
       const wordle = state.wordle;
       const { currentInputLine, currentInputLetter } = wordle;
+      if (currentInputLetter !== 4) {
+        toast.show({
+          content: "Not enough letters",
+        });
+      }
       if (currentInputLine === 6 || currentInputLetter !== 4) {
         return state;
       }
@@ -84,7 +90,10 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         guessWord = guessWord.concat(letter.letter!);
       })
       if (!guessSet5Letters.has(guessWord)) {
-        window.alert("That word was not found in the word list!")
+        toast.show({
+          content: "This word is not present in the word list!",
+        })
+        //window.alert("That word was not found in the word list!")
         return state;
       }
 

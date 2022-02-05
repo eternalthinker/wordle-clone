@@ -2,6 +2,7 @@
   --typography-primary: #000;
   --typography-secondary: #aaa;
   --typography-secondary-hover: #444;
+  --typography-contrast: #fff;
   --background-1: #fff;
   --background-2: #fff;
   --border-low: #ccc;
@@ -22,12 +23,14 @@
   --correct: #37b804;
   --correct-fore: #fff;
   --link: #0f448e;
+  --toast: rgba(0, 0, 0, 0.7);
 }
 
 [data-theme="dark"] {
   --typography-primary: #fff;
   --typography-secondary: rgb(204, 204, 204);
   --typography-secondary-hover: rgb(235, 235, 235);
+  --typography-contrast: #000;
   --background-1: rgb(29, 29, 29);
   --background-2: rgb(49, 49, 49);
   --border-low: rgb(139, 139, 139);
@@ -48,4 +51,5 @@
   --correct: #37b804;
   --correct-fore: #fff;
   --link: #5a99f1;
+  --toast: rgba(255, 255, 255, 0.7);
 }

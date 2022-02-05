@@ -1,0 +1,27 @@
+.toast {
+  background-color: var(--toast);
+  color: var(--typography-contrast);
+  width: 100%;
+  margin-bottom: 10px;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
+  animation: slide-in 0.2s;
+  transition: all 0.3s ease;
+}
+
+.content {
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
