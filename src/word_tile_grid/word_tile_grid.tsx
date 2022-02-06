@@ -4,17 +4,11 @@ import { DispatchType, RootContext } from "../context/root_context";
 import { Tile } from "../tile/tile";
 import { WordLine } from "../reducer/root_state";
 
-const WordTileLine = ({
-  wordLine,
-  lineIndex,
-}: {
-  wordLine: WordLine;
-  lineIndex: number;
-}) => {
+const WordTileLine = ({ wordLine }: { wordLine: WordLine }) => {
   return (
     <div className={styles.wordLine}>
       {wordLine.word.map((letter, i) => (
-        <Tile letter={letter} row={lineIndex} col={i} key={i} />
+        <Tile letter={letter} key={i} />
       ))}
     </div>
   );
@@ -74,7 +68,7 @@ export const WordTileGrid = () => {
       }}
     >
       {wordle.wordLines.map((wordLine, i) => (
-        <WordTileLine wordLine={wordLine} lineIndex={i} key={i} />
+        <WordTileLine wordLine={wordLine} key={i} />
       ))}
     </div>
   );

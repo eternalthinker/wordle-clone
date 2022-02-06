@@ -1,18 +1,8 @@
-import React, { MouseEventHandler } from "react";
 import styles from "./tile.module.css";
 import classNames from "classnames";
-import { RootContext } from "../context/root_context";
 import { Letter } from "../reducer/root_state";
 
-export const Tile = ({
-  letter,
-  row,
-  col,
-}: {
-  letter: Letter;
-  row: number;
-  col: number;
-}) => {
+export const Tile = ({ letter }: { letter: Letter }) => {
   return (
     <div className={styles.tileContainer}>
       <div

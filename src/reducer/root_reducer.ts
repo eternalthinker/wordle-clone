@@ -2,16 +2,16 @@ import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
 import { getLetterStatus } from "./get_letter_status";
-import {
-  RootState,
-  Action,
-  WordLine,
-} from "./root_state";
+import { generateToastId } from "./get_toast_id";
+import { RootState, Action, WordLine, GameState } from "./root_state";
 
 export const rootReducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
     case "letter_input": {
       const wordle = state.wordle;
+      if (wordle.gameState === "success" || wordle.gameState === "fail") {
+        return state;
+      }
       const { currentInputLine, currentInputLetter } = wordle;
       if (currentInputLine === 6 || currentInputLetter === 4) {
         return state;
@@ -37,13 +37,16 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
                 ...currentWordLine.word.slice(letterIndex + 1),
               ],
             },
-            ...wordle.wordLines.slice(currentInputLine+1),
+            ...wordle.wordLines.slice(currentInputLine + 1),
           ],
         },
       };
     }
     case "letter_delete": {
       const wordle = state.wordle;
+      if (wordle.gameState === "success" || wordle.gameState === "fail") {
+        return state;
+      }
       const { currentInputLine, currentInputLetter } = wordle;
       if (currentInputLine === 6 || currentInputLetter === -1) {
         return state;
@@ -68,57 +71,70 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
                 ...currentWordLine.word.slice(currentInputLetter + 1),
               ],
             },
-            ...wordle.wordLines.slice(currentInputLine+1),
+            ...wordle.wordLines.slice(currentInputLine + 1),
           ],
         },
       };
     }
     case "word_enter": {
       const wordle = state.wordle;
+      if (wordle.gameState === "success" || wordle.gameState === "fail") {
+        return state;
+      }
       const { currentInputLine, currentInputLetter } = wordle;
       if (currentInputLetter !== 4) {
         return {
           ...state,
           toasts: [
             {
-              id: Math.random().toString(36).slice(2, 9),
+              id: generateToastId(),
               content: "Not enough letters",
             },
             ...state.toasts,
-          ]
-        }
+          ],
+        };
       }
+      // same as fail
       if (currentInputLine === 6) {
         return state;
       }
       let guessWord = "";
-      wordle.wordLines[currentInputLine].word.forEach(letter => {
+      wordle.wordLines[currentInputLine].word.forEach((letter) => {
         guessWord = guessWord.concat(letter.letter!);
-      })
+      });
       if (!guessSet5Letters.has(guessWord)) {
         return {
           ...state,
           toasts: [
             {
-              id: Math.random().toString(36).slice(2, 9),
+              id: generateToastId(),
               content: "This word is not present in the word list!",
             },
             ...state.toasts,
-          ]
-        }
+          ],
+        };
       }
 
+      const word = wordle.wordLines[currentInputLine].word.map((letter, i) => ({
+        ...letter,
+        status: getLetterStatus(letter.letter!, i, state.wordle.solution),
+      }));
       const wordLines: WordLine[] = [
         ...wordle.wordLines.slice(0, currentInputLine),
         {
           status: "completed",
-          word: wordle.wordLines[currentInputLine].word.map((letter, i) => ({
-            ...letter,
-            status: getLetterStatus(letter.letter!, i, state.wordle.solution),
-          })),
+          word,
         },
-        ...wordle.wordLines.slice(currentInputLine+1),
+        ...wordle.wordLines.slice(currentInputLine + 1),
       ];
+      const isSuccess = word.every((letter) => letter.status === "correct");
+      const isFail = currentInputLine === 5 && !isSuccess;
+      let gameState: GameState = "inprogress";
+      if (isSuccess) {
+        gameState = "success";
+      } else if (isFail) {
+        gameState = "fail";
+      }
 
       const constraints = getConstraints(wordLines);
 
@@ -129,6 +145,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           currentInputLine: currentInputLine + 1,
           currentInputLetter: -1,
           wordLines,
+          gameState,
         },
         constraints,
       };
@@ -142,11 +159,13 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
     }
     case "toast_destroy": {
       const toasts = state.toasts;
-      const newToasts = toasts.filter(toast => toast.id !== action.payload.id)
+      const newToasts = toasts.filter(
+        (toast) => toast.id !== action.payload.id
+      );
       return {
         ...state,
         toasts: newToasts,
-      }
+      };
     }
     default: {
       return state;
