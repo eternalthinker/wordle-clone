@@ -1,15 +1,15 @@
-.wordLine {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
 .wordGrid {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .wordGrid:focus {
   outline: none;
+}
+
+.wordLine {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }

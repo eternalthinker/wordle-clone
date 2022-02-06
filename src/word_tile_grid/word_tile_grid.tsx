@@ -21,9 +21,29 @@ const WordTileLine = ({
 };
 
 export const WordTileGrid = () => {
+  const [dimensions, setDimensions] = React.useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      console.log("resizing");
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const { state, dispatch } = React.useContext(RootContext);
-  const { wordle } = state;
+
   const handleKeyBoard = React.useCallback(getHandleKeyBoard(dispatch), []);
+
   React.useEffect(() => {
     document.addEventListener("keyup", handleKeyBoard);
     return () => {
@@ -31,8 +51,28 @@ export const WordTileGrid = () => {
     };
   }, [handleKeyBoard]);
 
+  const { wordle, gameMode } = state;
+
+  // TODO: Use element measurement?
+  const height =
+    dimensions.height -
+    (200 + 8 + 5) - // keyboard
+    61 - // header
+    10; // wordle element gap
+  const width =
+    ((height - 5 * 8) / // tile gap
+      6) * // 1 tile size
+    (gameMode === "5letters" ? 5 : 6); // number of horizontal tiles
+
   return (
-    <div tabIndex={-1} className={styles.wordGrid}>
+    <div
+      tabIndex={-1}
+      className={styles.wordGrid}
+      style={{
+        width,
+        height,
+      }}
+    >
       {wordle.wordLines.map((wordLine, i) => (
         <WordTileLine wordLine={wordLine} lineIndex={i} key={i} />
       ))}
