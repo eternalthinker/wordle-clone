@@ -1,6 +1,7 @@
 import { ToastOptions } from "../base/toast/toast";
 import { LocalStorage } from "../utils/local_storage";
 import { solutionSet5Letters } from "../utils/words_5letters";
+import { getConstraints } from "./get_constraints";
 
 export type LetterStatus = "correct" | "misplaced" | "absent" | "input";
 
@@ -31,15 +32,17 @@ export type GameMode = "5letters" | "6letters";
 
 export type Theme = "light" | "dark" | "adaptive";
 
+export type Wordle = {
+  wordLines: WordLine[];
+  currentInputLine: number;
+  currentInputLetter: number;
+  gameState: GameState;
+  day: number;
+  solution: string;
+};
+
 export type RootState = {
-  wordle: {
-    wordLines: WordLine[];
-    currentInputLine: number;
-    currentInputLetter: number;
-    gameState: GameState;
-    day: number;
-    solution: string;
-  };
+  wordle: Wordle;
   constraints: Constraints;
   gameMode: GameMode;
   theme: Theme;
@@ -49,8 +52,8 @@ export type RootState = {
 
 export const MAX_SUGGESTED_WORDS = 10;
 
-export const createInitWord = (): WordLine => ({
-  word: new Array(5).fill({ letter: undefined, status: "input" }),
+export const createInitWord = (wordLength: number): WordLine => ({
+  word: new Array(wordLength).fill({ letter: undefined, status: "input" }),
   status: "input",
 });
 
@@ -76,6 +79,31 @@ const getDailySolution = (mode: GameMode) => {
   };
 };
 
+export const getWordLength = (gameMode: GameMode) => {
+  if (gameMode === "5letters") {
+    return 5;
+  }
+  return 6;
+};
+
+const createInitWordle = (
+  gameMode: GameMode,
+  day: number,
+  solution: string
+): Wordle => {
+  const wordLen = getWordLength(gameMode);
+  return {
+    wordLines: Array(6)
+      .fill(null)
+      .map((_) => createInitWord(wordLen)),
+    currentInputLine: 0,
+    currentInputLetter: -1,
+    gameState: "inprogress",
+    day,
+    solution,
+  };
+};
+
 export const createInitialState = (): RootState => {
   // Theme
   const preferDarkTheme = window.matchMedia(
@@ -88,22 +116,30 @@ export const createInitialState = (): RootState => {
   LocalStorage.setItem("theme", theme);
 
   // Game mode
-  const gameMode: GameMode = "5letters";
+  const storedGameMode: GameMode | null = LocalStorage.getItem("gameMode") as GameMode;
+  const gameMode = storedGameMode ?? "5letters";
+  LocalStorage.setItem("gameMode", gameMode);
+
+  // Persisted game state
+  const storedWordleStr = LocalStorage.getItem("gameState");
+  let storedWordle: Wordle | undefined;
+  if (storedWordleStr != null) {
+    storedWordle = JSON.parse(storedWordleStr) as Wordle;
+  }
 
   const { solution, day } = getDailySolution(gameMode);
 
+  // Persisted game state is from an older day
+  if (storedWordle?.day !== day) {
+    storedWordle = undefined;
+    LocalStorage.removeItem("gameState");
+  }
+
   return {
-    wordle: {
-      wordLines: Array(6)
-        .fill(null)
-        .map((_) => createInitWord()),
-      currentInputLine: 0,
-      currentInputLetter: -1,
-      gameState: "inprogress",
-      day,
-      solution,
-    },
-    constraints: createInitConstraints(),
+    wordle: storedWordle ?? createInitWordle(gameMode, day, solution),
+    constraints: storedWordle
+      ? getConstraints(storedWordle.wordLines)
+      : createInitConstraints(),
     gameMode,
     theme,
     toasts: [],

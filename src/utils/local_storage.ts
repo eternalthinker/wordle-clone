@@ -17,4 +17,12 @@ export class LocalStorage {
     }
     return null;
   };
+
+  public static removeItem = (key: string): void => {
+    try {
+      window.localStorage.removeItem(key);
+    } catch (e) {
+      console.log("Error removing from local storage:", e);
+    }
+  };
 }

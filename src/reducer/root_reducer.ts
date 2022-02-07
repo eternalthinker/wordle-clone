@@ -80,10 +80,13 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
     }
     case "word_enter": {
       const wordle = state.wordle;
+      // Game already ended
       if (wordle.gameState === "success" || wordle.gameState === "fail") {
         return state;
       }
+
       const { currentInputLine, currentInputLetter } = wordle;
+      // Invalid state of input to be enter
       if (currentInputLetter !== 4) {
         return {
           ...state,
@@ -96,14 +99,17 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           ],
         };
       }
-      // same as fail
+      // Same as fail (redundant)
       if (currentInputLine === 6) {
         return state;
       }
+
       let guessWord = "";
       wordle.wordLines[currentInputLine].word.forEach((letter) => {
         guessWord = guessWord.concat(letter.letter!);
       });
+
+      // Word not in list
       if (!guessSet5Letters.has(guessWord)) {
         return {
           ...state,
@@ -117,6 +123,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         };
       }
 
+      // Process guess word
       const guessStatus = getGuessStatus(guessWord, state.wordle.solution);
       const word = wordle.wordLines[currentInputLine].word.map((letter, i) => ({
         ...letter,
@@ -131,6 +138,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         ...wordle.wordLines.slice(currentInputLine + 1),
       ];
 
+      // Check if game has ended
       const isSuccess = guessStatus.every((status) => status === "correct");
       const isFail = currentInputLine === 5 && !isSuccess;
       let gameState: GameState = "inprogress";
@@ -140,6 +148,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         gameState = "fail";
       }
 
+      // Add toasts if game has ended
       let toasts = state.toasts;
       const message = getFinalMessage(
         gameState,
@@ -159,15 +168,20 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
 
       const constraints = getConstraints(wordLines);
 
+      const newWordle = {
+        ...wordle,
+        currentInputLine: currentInputLine + 1,
+        currentInputLetter: -1,
+        wordLines,
+        gameState,
+      };
+
+      // Persist game state
+      LocalStorage.setItem("gameState", JSON.stringify(newWordle));
+
       return {
         ...state,
-        wordle: {
-          ...wordle,
-          currentInputLine: currentInputLine + 1,
-          currentInputLetter: -1,
-          wordLines,
-          gameState,
-        },
+        wordle: newWordle,
         constraints,
         toasts,
         showShare: gameState !== "inprogress",
