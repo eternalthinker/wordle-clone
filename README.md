@@ -2,8 +2,6 @@
 
 # General
 
-- Message system
-  - Final messages depending on line of success OR fail
 - Share message
 - Store game progress and load
 - Colors according to count of each letter in solution

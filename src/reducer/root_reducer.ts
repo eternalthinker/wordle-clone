@@ -1,6 +1,7 @@
 import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
+import { getFinalMessage } from "./get_final_message";
 import { getLetterStatus } from "./get_letter_status";
 import { generateToastId } from "./get_toast_id";
 import { RootState, Action, WordLine, GameState } from "./root_state";
@@ -136,6 +137,23 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         gameState = "fail";
       }
 
+      let toasts = state.toasts;
+      const message = getFinalMessage(
+        gameState,
+        currentInputLine,
+        wordle.solution
+      );
+      if (message != null) {
+        toasts = [
+          {
+            id: generateToastId(),
+            content: message,
+            duration: 3000,
+          },
+          ...toasts,
+        ];
+      }
+
       const constraints = getConstraints(wordLines);
 
       return {
@@ -148,6 +166,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           gameState,
         },
         constraints,
+        toasts,
       };
     }
     case "theme_change": {
