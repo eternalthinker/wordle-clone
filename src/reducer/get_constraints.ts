@@ -1,12 +1,13 @@
 import {
   Constraints,
   createInitConstraints,
+  GameMode,
   Letter,
   WordLine,
 } from "./root_state";
 
-export const getConstraints = (wordLines: WordLine[]): Constraints => {
-  const constraints = createInitConstraints();
+export const getConstraints = (wordLines: WordLine[], gameMode: GameMode): Constraints => {
+  const constraints = createInitConstraints(gameMode);
   for (let wi = 0; wi < wordLines.length; wi++) {
     const wordLine = wordLines[wi];
     if (wordLine.status === "input") {

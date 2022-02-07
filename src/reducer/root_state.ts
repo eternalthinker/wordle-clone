@@ -1,6 +1,6 @@
 import { ToastOptions } from "../base/toast/toast";
 import { LocalStorage } from "../utils/local_storage";
-import { solutionSet5Letters } from "../utils/words_5letters";
+import { solutionList5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
 
 export type LetterStatus = "correct" | "misplaced" | "absent" | "input";
@@ -57,24 +57,31 @@ export const createInitWord = (wordLength: number): WordLine => ({
   status: "input",
 });
 
-export const createInitConstraints = () => ({
-  excludedLetters: new Set<string>(),
-  includedLetters: new Set<string>(),
-  incorrectPositions: Array(5)
-    .fill(null)
-    .map((_) => new Set<string>()),
-  correctPositions: Array(5).fill(undefined),
-});
+export const createInitConstraints = (gameMode: GameMode) => {
+  const wordLength = getWordLength(gameMode);
+  return {
+    excludedLetters: new Set<string>(),
+    includedLetters: new Set<string>(),
+    incorrectPositions: Array(wordLength)
+      .fill(null)
+      .map((_) => new Set<string>()),
+    correctPositions: Array(wordLength).fill(undefined),
+  };
+};
 
 const getDailySolution = (mode: GameMode) => {
-  const wordle5LettersStart = new Date("June 19, 2021");
+  const solutionList =
+    mode === "5letters" ? solutionList5Letters : solutionList5Letters;
+  const wordleStartDate =
+    mode === "5letters"
+      ? new Date("June 19, 2021")
+      : new Date("February 7, 2022");
   const today = new Date();
   const diffDays = Math.floor(
-    Math.abs(today.getTime() - wordle5LettersStart.getTime()) /
-      (1000 * 3600 * 24)
+    Math.abs(today.getTime() - wordleStartDate.getTime()) / (1000 * 3600 * 24)
   );
   return {
-    solution: solutionSet5Letters[diffDays % solutionSet5Letters.length],
+    solution: solutionList[diffDays % solutionList.length],
     day: diffDays,
   };
 };
@@ -116,7 +123,9 @@ export const createInitialState = (): RootState => {
   LocalStorage.setItem("theme", theme);
 
   // Game mode
-  const storedGameMode: GameMode | null = LocalStorage.getItem("gameMode") as GameMode;
+  const storedGameMode: GameMode | null = LocalStorage.getItem(
+    "gameMode"
+  ) as GameMode;
   const gameMode = storedGameMode ?? "5letters";
   LocalStorage.setItem("gameMode", gameMode);
 
@@ -138,8 +147,8 @@ export const createInitialState = (): RootState => {
   return {
     wordle: storedWordle ?? createInitWordle(gameMode, day, solution),
     constraints: storedWordle
-      ? getConstraints(storedWordle.wordLines)
-      : createInitConstraints(),
+      ? getConstraints(storedWordle.wordLines, gameMode)
+      : createInitConstraints(gameMode),
     gameMode,
     theme,
     toasts: [],
@@ -164,6 +173,12 @@ export type Action =
       type: "theme_change";
       payload: {
         theme: Theme;
+      };
+    }
+  | {
+      type: "game_mode_change";
+      payload: {
+        gameMode: GameMode;
       };
     }
   | {

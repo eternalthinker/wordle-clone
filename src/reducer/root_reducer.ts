@@ -4,7 +4,7 @@ import { getConstraints } from "./get_constraints";
 import { getFinalMessage } from "./get_final_message";
 import { getGuessStatus } from "./get_guess_status";
 import { generateToastId } from "./get_toast_id";
-import { RootState, Action, WordLine, GameState } from "./root_state";
+import { RootState, Action, WordLine, GameState, createInitialState, getWordLength } from "./root_state";
 import { shareResult } from "./share_result";
 
 export const rootReducer = (state: RootState, action: Action): RootState => {
@@ -15,7 +15,8 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         return state;
       }
       const { currentInputLine, currentInputLetter } = wordle;
-      if (currentInputLine === 6 || currentInputLetter === 4) {
+      const wordLength = getWordLength(state.gameMode);
+      if (currentInputLine === 6 || currentInputLetter === wordLength-1) {
         return state;
       }
       const letterIndex = currentInputLetter + 1;
@@ -86,8 +87,9 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       }
 
       const { currentInputLine, currentInputLetter } = wordle;
+      const wordLength = getWordLength(state.gameMode);
       // Invalid state of input to be enter
-      if (currentInputLetter !== 4) {
+      if (currentInputLetter !== wordLength-1) {
         return {
           ...state,
           toasts: [
@@ -166,7 +168,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         ];
       }
 
-      const constraints = getConstraints(wordLines);
+      const constraints = getConstraints(wordLines, state.gameMode);
 
       const newWordle = {
         ...wordle,
@@ -192,6 +194,15 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       return {
         ...state,
         theme: action.payload.theme,
+      };
+    }
+    case "game_mode_change": {
+      LocalStorage.setItem("gameMode", action.payload.gameMode);
+      // Clean up in-progress game state
+      LocalStorage.removeItem("gameState");
+      return {
+        ...createInitialState(),
+        gameMode: action.payload.gameMode,
       };
     }
     case "toast_destroy": {
