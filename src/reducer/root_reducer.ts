@@ -2,7 +2,7 @@ import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
 import { getFinalMessage } from "./get_final_message";
-import { getGuessStatus, getLetterStatus } from "./get_guess_status";
+import { getGuessStatus } from "./get_guess_status";
 import { generateToastId } from "./get_toast_id";
 import { RootState, Action, WordLine, GameState } from "./root_state";
 
