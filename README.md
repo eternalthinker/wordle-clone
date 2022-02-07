@@ -2,8 +2,9 @@
 
 # General
 
-- Share message
 - Store game progress and load
+- Clear for new wordle
+- Next wordle count down
 
 # 6 Letters
 

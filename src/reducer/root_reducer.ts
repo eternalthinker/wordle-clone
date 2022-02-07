@@ -5,6 +5,7 @@ import { getFinalMessage } from "./get_final_message";
 import { getGuessStatus } from "./get_guess_status";
 import { generateToastId } from "./get_toast_id";
 import { RootState, Action, WordLine, GameState } from "./root_state";
+import { shareResult } from "./share_result";
 
 export const rootReducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
@@ -169,6 +170,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         },
         constraints,
         toasts,
+        showShare: gameState !== "inprogress",
       };
     }
     case "theme_change": {
@@ -186,6 +188,29 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       return {
         ...state,
         toasts: newToasts,
+      };
+    }
+    case "show_share": {
+      return {
+        ...state,
+        showShare: action.payload.status,
+      };
+    }
+    case "share_result": {
+      const { copiedToClipboard } = shareResult(state);
+      let toasts = state.toasts;
+      if (copiedToClipboard) {
+        toasts = [
+          {
+            id: generateToastId(),
+            content: "Copied to clipboard!",
+          },
+          ...toasts,
+        ];
+      }
+      return {
+        ...state,
+        toasts,
       };
     }
     default: {

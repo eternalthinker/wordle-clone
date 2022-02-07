@@ -37,12 +37,14 @@ export type RootState = {
     currentInputLine: number;
     currentInputLetter: number;
     gameState: GameState;
+    day: number;
     solution: string;
   };
   constraints: Constraints;
   gameMode: GameMode;
   theme: Theme;
   toasts: ToastOptions[];
+  showShare: boolean;
 };
 
 export const MAX_SUGGESTED_WORDS = 10;
@@ -68,7 +70,10 @@ const getDailySolution = (mode: GameMode) => {
     Math.abs(today.getTime() - wordle5LettersStart.getTime()) /
       (1000 * 3600 * 24)
   );
-  return solutionSet5Letters[diffDays % solutionSet5Letters.length];
+  return {
+    solution: solutionSet5Letters[diffDays % solutionSet5Letters.length],
+    day: diffDays,
+  };
 };
 
 export const createInitialState = (): RootState => {
@@ -85,6 +90,8 @@ export const createInitialState = (): RootState => {
   // Game mode
   const gameMode: GameMode = "5letters";
 
+  const { solution, day } = getDailySolution(gameMode);
+
   return {
     wordle: {
       wordLines: Array(6)
@@ -93,12 +100,14 @@ export const createInitialState = (): RootState => {
       currentInputLine: 0,
       currentInputLetter: -1,
       gameState: "inprogress",
-      solution: getDailySolution(gameMode),
+      day,
+      solution,
     },
     constraints: createInitConstraints(),
     gameMode,
     theme,
     toasts: [],
+    showShare: false,
   };
 };
 
@@ -125,5 +134,14 @@ export type Action =
       type: "toast_destroy";
       payload: {
         id: string;
+      };
+    }
+  | {
+      type: "share_result";
+    }
+  | {
+      type: "show_share";
+      payload: {
+        status: boolean;
       };
     };

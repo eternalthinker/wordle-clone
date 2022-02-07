@@ -24,6 +24,9 @@
   --correct-fore: #fff;
   --link: #0f448e;
   --toast: rgba(0, 0, 0, 0.7);
+  --positive: #10b310;
+  --positive-hover:#148a14;
+  --positive-fore: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -52,4 +55,7 @@
   --correct-fore: #fff;
   --link: #5a99f1;
   --toast: rgba(255, 255, 255, 0.85);
+  --positive: #10b310;
+  --positive-hover:#148a14;
+  --positive-fore: #ffffff;
 }

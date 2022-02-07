@@ -1,0 +1,70 @@
+.shareScreen {
+  padding: 32px;
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  top: 20%;
+  left: 0px;
+  right: 0px;
+  background-color: var(--background-2);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 2px solid var(--border-low);
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeButton {
+  color: var(--typography-secondary);
+  border: 2px solid var(--typography-secondary);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: var(--typography-secondary-hover);
+  border: 2px solid var(--typography-secondary-hover);
+}
+
+.share {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.shareButton {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: var(--positive-fore);
+  background-color: var(--positive);
+  appearance: none;
+  outline: none;
+  border: none;
+  font-size: 1.2em;
+  padding: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.shareButton:hover {
+  background-color: var(--positive-hover);
+}

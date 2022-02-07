@@ -44,8 +44,18 @@
   left: 8px;
 }
 
-.settingsButton {
-  composes: button;
+.endButtonsContainer {
   position: absolute;
   right: 8px;
+  display: flex;
+  gap: 10px;
+}
+
+.settingsButton {
+  composes: button;
+  
+}
+
+.shareButton {
+  composes: button;
 }
