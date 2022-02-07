@@ -37,17 +37,17 @@ export type RootState = {
     currentInputLine: number;
     currentInputLetter: number;
     gameState: GameState;
-    solution: string,
+    solution: string;
   };
-  constraints: Constraints,
-  gameMode: GameMode,
+  constraints: Constraints;
+  gameMode: GameMode;
   theme: Theme;
-  toasts: ToastOptions[],
+  toasts: ToastOptions[];
 };
 
 export const MAX_SUGGESTED_WORDS = 10;
 
-export const createInitWord = ():WordLine => ({
+export const createInitWord = (): WordLine => ({
   word: new Array(5).fill({ letter: undefined, status: "input" }),
   status: "input",
 });
@@ -62,11 +62,14 @@ export const createInitConstraints = () => ({
 });
 
 const getDailySolution = (mode: GameMode) => {
-  const wordle5LettersStart = new Date('June 19, 2021');
+  const wordle5LettersStart = new Date("June 19, 2021");
   const today = new Date();
-  const diffDays = Math.floor(Math.abs(today.getTime() - wordle5LettersStart.getTime()) / (1000 * 3600 * 24))
+  const diffDays = Math.floor(
+    Math.abs(today.getTime() - wordle5LettersStart.getTime()) /
+      (1000 * 3600 * 24)
+  );
   return solutionSet5Letters[diffDays % solutionSet5Letters.length];
-}
+};
 
 export const createInitialState = (): RootState => {
   // Theme
@@ -74,7 +77,8 @@ export const createInitialState = (): RootState => {
     "(prefers-color-scheme: dark)"
   ).matches;
   const storedTheme: Theme | null = LocalStorage.getItem("theme") as Theme;
-  const shouldSetDarkTheme = storedTheme != null ? storedTheme === "dark" : preferDarkTheme;
+  const shouldSetDarkTheme =
+    storedTheme != null ? storedTheme === "dark" : preferDarkTheme;
   const theme = shouldSetDarkTheme ? "dark" : "light";
   LocalStorage.setItem("theme", theme);
 
@@ -83,7 +87,9 @@ export const createInitialState = (): RootState => {
 
   return {
     wordle: {
-      wordLines: Array(6).fill(null).map(_ => createInitWord()),
+      wordLines: Array(6)
+        .fill(null)
+        .map((_) => createInitWord()),
       currentInputLine: 0,
       currentInputLetter: -1,
       gameState: "inprogress",
@@ -116,8 +122,8 @@ export type Action =
       };
     }
   | {
-    type: "toast_destroy";
-    payload: {
-      id: string;
-    }
-  };
+      type: "toast_destroy";
+      payload: {
+        id: string;
+      };
+    };

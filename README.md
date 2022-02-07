@@ -4,7 +4,6 @@
 
 - Share message
 - Store game progress and load
-- Colors according to count of each letter in solution
 
 # 6 Letters
 

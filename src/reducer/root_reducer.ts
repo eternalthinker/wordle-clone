@@ -2,7 +2,7 @@ import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
 import { getConstraints } from "./get_constraints";
 import { getFinalMessage } from "./get_final_message";
-import { getLetterStatus } from "./get_letter_status";
+import { getGuessStatus, getLetterStatus } from "./get_guess_status";
 import { generateToastId } from "./get_toast_id";
 import { RootState, Action, WordLine, GameState } from "./root_state";
 
@@ -116,9 +116,10 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         };
       }
 
+      const guessStatus = getGuessStatus(guessWord, state.wordle.solution);
       const word = wordle.wordLines[currentInputLine].word.map((letter, i) => ({
         ...letter,
-        status: getLetterStatus(letter.letter!, i, state.wordle.solution),
+        status: guessStatus[i],
       }));
       const wordLines: WordLine[] = [
         ...wordle.wordLines.slice(0, currentInputLine),
@@ -128,7 +129,8 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         },
         ...wordle.wordLines.slice(currentInputLine + 1),
       ];
-      const isSuccess = word.every((letter) => letter.status === "correct");
+
+      const isSuccess = guessStatus.every((status) => status === "correct");
       const isFail = currentInputLine === 5 && !isSuccess;
       let gameState: GameState = "inprogress";
       if (isSuccess) {
