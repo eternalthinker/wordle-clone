@@ -48,11 +48,13 @@ export const WordTileGrid = () => {
   const { wordle, gameMode } = state;
 
   // TODO: Use element measurement?
-  const height =
+  const calcHeight =
     dimensions.height -
     (200 + 8 + 5) - // keyboard
     61 - // header
     10; // wordle element gap
+  const maxHeight = 64 * 6 + 5 * 8 + 10;
+  const height = Math.min(calcHeight, maxHeight);
   const width =
     ((height - 5 * 8) / // tile gap
       6) * // 1 tile size
