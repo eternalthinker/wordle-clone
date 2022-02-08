@@ -1,7 +1,7 @@
 import styles from "./app.module.css";
 import "../base/theme/base.css";
 import { Header } from "../header/header";
-import { WordleGame } from "../wordle_helper/wordle_game";
+import { WordleGame } from "../wordle_game/wordle_game";
 import { RootContext, RootProvider } from "../context/root_context";
 import React from "react";
 import { ToastContainer } from "../base/toast/toast_container";
