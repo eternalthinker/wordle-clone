@@ -61,7 +61,7 @@
 
 @keyframes revealHint {
   0% {
-    background-color: var(--input);
+    background-color: var(--tile-neutral);
     transform: scale(1.2);
   }
   100% {

@@ -16,6 +16,7 @@
   --secondary-fore: #000;
   --tertiary: #b9b9b9;
   --tertiary-fore: #fcfcfc;
+  --tile-neutral: #b6b6b6;
   --absent: rgb(117, 117, 117);
   --absent-fore: #eee;
   --misplaced: #c2b010;
@@ -47,6 +48,7 @@
   --secondary-fore: #eee;
   --tertiary: rgb(170, 169, 169);
   --tertiary-fore: #fcfcfc;
+  --tile-neutral: #8f8f8f;
   --absent: rgb(77, 76, 76);
   --absent-fore: #eee;
   --misplaced: #c2b010;
