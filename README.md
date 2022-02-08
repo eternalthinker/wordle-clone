@@ -4,11 +4,6 @@
 
 - Next wordle count down
 
-# 6 Letters
-
-- 6letter mode knob + storage
-- 6letter word list + solutions
-
 # Stretch
 
 - Hard mode?

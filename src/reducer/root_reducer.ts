@@ -1,10 +1,18 @@
 import { LocalStorage } from "../utils/local_storage";
 import { guessSet5Letters } from "../utils/words_5letters";
+import { guessSet6Letters } from "../utils/words_6letters";
 import { getConstraints } from "./get_constraints";
 import { getFinalMessage } from "./get_final_message";
 import { getGuessStatus } from "./get_guess_status";
 import { generateToastId } from "./get_toast_id";
-import { RootState, Action, WordLine, GameState, createInitialState, getWordLength } from "./root_state";
+import {
+  RootState,
+  Action,
+  WordLine,
+  GameState,
+  createInitialState,
+  getWordLength,
+} from "./root_state";
 import { shareResult } from "./share_result";
 
 export const rootReducer = (state: RootState, action: Action): RootState => {
@@ -16,7 +24,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       }
       const { currentInputLine, currentInputLetter } = wordle;
       const wordLength = getWordLength(state.gameMode);
-      if (currentInputLine === 6 || currentInputLetter === wordLength-1) {
+      if (currentInputLine === 6 || currentInputLetter === wordLength - 1) {
         return state;
       }
       const letterIndex = currentInputLetter + 1;
@@ -89,7 +97,7 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       const { currentInputLine, currentInputLetter } = wordle;
       const wordLength = getWordLength(state.gameMode);
       // Invalid state of input to be enter
-      if (currentInputLetter !== wordLength-1) {
+      if (currentInputLetter !== wordLength - 1) {
         return {
           ...state,
           toasts: [
@@ -112,7 +120,9 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       });
 
       // Word not in list
-      if (!guessSet5Letters.has(guessWord)) {
+      const guessSet =
+        state.gameMode === "6letters" ? guessSet6Letters : guessSet5Letters;
+      if (!guessSet.has(guessWord)) {
         return {
           ...state,
           toasts: [

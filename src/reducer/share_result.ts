@@ -50,7 +50,7 @@ const getShareContent = (state: RootState) => {
   const title = state.gameMode === "5letters" ? "Wordle(clone)" : "Wordle6";
   const attempt = `${wordle.currentInputLine}/${wordle.wordLines.length}`;
   const url = "https://code.eternalthinker.co/wordle-clone";
-  const shareContent = `${title} ${wordle.day} ${attempt}\n\n${shareGrid}\n\n${url}`;
+  const shareContent = `${title} ${wordle.day} ${attempt}\n\n${shareGrid}\n${url}`;
 
   return shareContent;
 };

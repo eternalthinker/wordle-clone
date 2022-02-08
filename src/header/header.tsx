@@ -10,7 +10,7 @@ export const Header = () => {
   const [showSettings, setShowSettings] = React.useState(false);
 
   const { state, dispatch } = React.useContext(RootContext);
-  const { wordle, showShare } = state;
+  const { wordle, gameMode, showShare } = state;
   const { gameState } = wordle;
 
   return (
@@ -19,7 +19,7 @@ export const Header = () => {
         <button onClick={() => setShowHelp(true)} className={styles.helpButton}>
           ?
         </button>
-        <h1>Wordle Clone</h1>
+        <h1>{gameMode === "6letters" ? "Wordle 6" : "Wordle Clone"}</h1>
         <div className={styles.endButtonsContainer}>
           {gameState !== "inprogress" && (
             <button

@@ -1,6 +1,7 @@
 import { ToastOptions } from "../base/toast/toast";
 import { LocalStorage } from "../utils/local_storage";
 import { solutionList5Letters } from "../utils/words_5letters";
+import { solutionList6Letters } from "../utils/words_6letters";
 import { getConstraints } from "./get_constraints";
 
 export type LetterStatus = "correct" | "misplaced" | "absent" | "input";
@@ -71,11 +72,11 @@ export const createInitConstraints = (gameMode: GameMode) => {
 
 const getDailySolution = (mode: GameMode) => {
   const solutionList =
-    mode === "5letters" ? solutionList5Letters : solutionList5Letters;
+    mode === "6letters" ? solutionList6Letters : solutionList5Letters;
   const wordleStartDate =
-    mode === "5letters"
-      ? new Date("June 19, 2021")
-      : new Date("February 7, 2022");
+    mode === "6letters"
+      ? new Date("February 8, 2022")
+      : new Date("June 19, 2021");
   const today = new Date();
   const diffDays = Math.floor(
     Math.abs(today.getTime() - wordleStartDate.getTime()) / (1000 * 3600 * 24)
