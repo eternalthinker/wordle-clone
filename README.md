@@ -8,7 +8,6 @@ Play at: https://code.eternalthinker.co/wordle-clone/
 
 ### General
 
-- animate hint reveal
 - Next wordle count down
 
 ### Stretch

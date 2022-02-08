@@ -4,8 +4,12 @@ export const getGuessStatus = (
   guess: string,
   solution: string
 ): LetterStatus[] => {
+  // Contains count of each letter in the solution
   const solutionCountMap: Record<string, number> = {};
-  const guessPositionMap: Record<string, number[]> = {};
+  // Contains count of correct/misplaced letters in the solution
+  const guessCountMap: Record<string, number> = {};
+  const result: LetterStatus[] = Array(guess.length).fill("absent");
+
   for (let i = 0; i < guess.length; ++i) {
     const sLetter = solution[i];
     if (solutionCountMap[sLetter] == null) {
@@ -15,42 +19,26 @@ export const getGuessStatus = (
     }
 
     const gLetter = guess[i];
-    if (guessPositionMap[gLetter] == null) {
-      guessPositionMap[gLetter] = [i];
-    } else {
-      guessPositionMap[gLetter].push(i);
+
+    if (sLetter === gLetter) {
+      result[i] = "correct";
+      guessCountMap[gLetter] = (guessCountMap[gLetter] ?? 0) + 1;
+      continue;
     }
   }
 
-  const result: LetterStatus[] = [];
   for (let i = 0; i < guess.length; ++i) {
     const letter = guess[i];
 
-    if (solution.charAt(i) === letter) {
-      result.push("correct");
+    if (result[i] === "absent" && solution.includes(letter)) {
       const sLetterCount = solutionCountMap[letter];
-      const prevPositions = guessPositionMap[letter].filter((pos) => pos < i);
-      // Ideally prevLetters < sLetterCount. Otherwise, some
-      // guess letters have been incorrectly coloured yellow.
-      if (prevPositions.length >= sLetterCount) {
-        prevPositions.forEach((pos) => {
-          if (result[pos] !== "correct") {
-            result[pos] = "absent";
-          }
-        });
-      }
-    } else if (solution.includes(letter)) {
-      const sLetterCount = solutionCountMap[letter];
-      const prevPositions = guessPositionMap[letter].filter((pos) => pos < i);
+      const gLetterCount = guessCountMap[letter] ?? 0;
       // If enough prevLetters have been coloured, do not
       // mark any more as yellow.
-      if (prevPositions.length < sLetterCount) {
-        result.push("misplaced");
-      } else {
-        result.push("absent");
+      if (gLetterCount < sLetterCount) {
+        result[i] = "misplaced";
+        guessCountMap[letter] = (guessCountMap[letter] ?? 0) + 1;
       }
-    } else {
-      result.push("absent");
     }
   }
 
