@@ -55,12 +55,6 @@
   border: none;
 }
 
-.absent,
-.misplaced,
-.correct {
-  cursor: pointer;
-}
-
 .reveal {
   animation: revealHint 0.25s ease-in-out;
 }

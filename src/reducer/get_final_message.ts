@@ -11,18 +11,19 @@ export const getFinalMessage = (
     case "fail":
       return `😥 Oops! Better luck next time. The solution is: ${solution.toUpperCase()}`;
     case "success":
+      // currentInputLine after it is updated to the next line
       switch (currentInputLine) {
-        case 0:
-          return "🤯 Wow genius!";
         case 1:
-          return "😱 Great work!";
+          return "🤯 Wow genius!";
         case 2:
-          return "🤩 Nicely done";
+          return "😱 Great work!";
         case 3:
-          return "🎉 Good one!";
+          return "🤩 Nicely done";
         case 4:
-          return "😎 You got it!";
+          return "🎉 Good one!";
         case 5:
+          return "😎 You got it!";
+        case 6:
           return "😭 Close call!";
         default:
           return null;
