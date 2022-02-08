@@ -18,6 +18,9 @@ import { shareResult } from "./share_result";
 export const rootReducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
     case "letter_input": {
+      if (state.isRevealing) {
+        return state;
+      }
       const wordle = state.wordle;
       if (wordle.gameState === "success" || wordle.gameState === "fail") {
         return state;
@@ -88,6 +91,9 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       };
     }
     case "word_enter": {
+      if (state.isRevealing) {
+        return state;
+      }
       const wordle = state.wordle;
       // Game already ended
       if (wordle.gameState === "success" || wordle.gameState === "fail") {
@@ -160,8 +166,6 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         gameState = "fail";
       }
 
-      const constraints = getConstraints(wordLines, state.gameMode);
-
       const newWordle = {
         ...wordle,
         currentInputLine: currentInputLine + 1,
@@ -177,10 +181,10 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       return {
         ...state,
         wordle: newWordle,
-        constraints,
+        isRevealing: true,
       };
     }
-    case "game_finish": {
+    case "reveal_end": {
       const { wordle } = state;
       // Add toast for game end
       let toasts = state.toasts;
@@ -199,10 +203,14 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
           ...toasts,
         ];
       }
+      const constraints = getConstraints(wordle.wordLines, state.gameMode);
+
       return {
         ...state,
         toasts,
-        showShare: true,
+        showShare: wordle.gameState !== "inprogress",
+        constraints,
+        isRevealing: false,
       };
     }
     case "theme_change": {

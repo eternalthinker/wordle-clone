@@ -5,6 +5,7 @@ import { WordleGame } from "../wordle_game/wordle_game";
 import { RootContext, RootProvider } from "../context/root_context";
 import React from "react";
 import { ToastContainer } from "../base/toast/toast_container";
+import { getWordLength } from "../reducer/root_state";
 
 export const Root = () => {
   return (
@@ -16,13 +17,14 @@ export const Root = () => {
 
 export const App = () => {
   const { state, dispatch } = React.useContext(RootContext);
-  const { theme, wordle } = state;
+  const { theme, isRevealing, gameMode } = state;
 
   React.useEffect(() => {
-    if (wordle.gameState !== "inprogress") {
-      setTimeout(() => dispatch({ type: "game_finish" }), 6 * 0.25 * 1000);
+    if (isRevealing) {
+      const wordLength = getWordLength(gameMode);
+      setTimeout(() => dispatch({ type: "reveal_end" }), (wordLength+1) * 0.25 * 1000);
     }
-  }, [wordle.gameState, dispatch]);
+  }, [isRevealing, dispatch, gameMode]);
 
   return (
     <div className={styles.appContainer} data-theme={theme}>

@@ -49,6 +49,7 @@ export type RootState = {
   theme: Theme;
   toasts: ToastOptions[];
   showShare: boolean;
+  isRevealing: boolean;
 };
 
 export const MAX_SUGGESTED_WORDS = 10;
@@ -146,8 +147,10 @@ export const createInitialState = (): RootState => {
     LocalStorage.removeItem(gameStateKey);
   }
 
+  const wordle = storedWordle ?? createInitWordle(gameMode, day, solution);
+
   return {
-    wordle: storedWordle ?? createInitWordle(gameMode, day, solution),
+    wordle,
     constraints: storedWordle
       ? getConstraints(storedWordle.wordLines, gameMode)
       : createInitConstraints(gameMode),
@@ -155,6 +158,7 @@ export const createInitialState = (): RootState => {
     theme,
     toasts: [],
     showShare: false,
+    isRevealing: wordle.gameState !== "inprogress",
   };
 };
 
@@ -198,4 +202,4 @@ export type Action =
         status: boolean;
       };
     }
-  | { type: "game_finish" };
+  | { type: "reveal_end" };
