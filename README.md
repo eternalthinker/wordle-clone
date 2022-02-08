@@ -1,16 +1,22 @@
 ## Wordle Clone
 
-# General
+Wordle clone with 5 or 6 letter word options.  
+The 5 letter mode uses the same Wordle daily list.  
+Play at: https://code.eternalthinker.co/wordle-clone/
+
+## TODO
+
+### General
 
 - animate hint reveal
 - Next wordle count down
 
-# Stretch
+### Stretch
 
 - Hard mode?
 - Past solutions replay
 
-# Experimental
+### Experimental
 
 - a11y
   - Word grid has grid role?
