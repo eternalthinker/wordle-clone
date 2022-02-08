@@ -25,7 +25,6 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5em;
-  transition: transform 0.25s ease-in-out;
 }
 
 .input {
@@ -60,4 +59,19 @@
 .misplaced,
 .correct {
   cursor: pointer;
+}
+
+.reveal {
+  animation: revealHint 0.25s ease-in-out;
+}
+
+@keyframes revealHint {
+  0% {
+    background-color: var(--input);
+    transform: scale(1.2);
+  }
+  100% {
+    background-color: revert;
+    transform: scale(1);
+  }
 }

@@ -197,4 +197,5 @@ export type Action =
       payload: {
         status: boolean;
       };
-    };
+    }
+  | { type: "game_finish" };

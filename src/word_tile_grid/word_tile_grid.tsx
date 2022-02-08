@@ -4,11 +4,17 @@ import { DispatchType, RootContext } from "../context/root_context";
 import { Tile } from "../tile/tile";
 import { WordLine } from "../reducer/root_state";
 
-const WordTileLine = ({ wordLine }: { wordLine: WordLine }) => {
+const WordTileLine = ({
+  wordLine,
+  revealing,
+}: {
+  wordLine: WordLine;
+  revealing?: boolean;
+}) => {
   return (
     <div className={styles.wordLine}>
       {wordLine.word.map((letter, i) => (
-        <Tile letter={letter} key={i} />
+        <Tile letter={letter} key={i} letterIndex={i} revealing={revealing}/>
       ))}
     </div>
   );
@@ -58,7 +64,7 @@ export const WordTileGrid = () => {
   const width =
     ((height - 5 * 8) / // tile gap
       6) * // 1 tile size
-    (gameMode === "5letters" ? 5 : 6); // number of horizontal tiles
+    (gameMode === "6letters" ? 6 : 5); // number of horizontal tiles
 
   return (
     <div
@@ -70,7 +76,13 @@ export const WordTileGrid = () => {
       }}
     >
       {wordle.wordLines.map((wordLine, i) => (
-        <WordTileLine wordLine={wordLine} key={i} />
+        <WordTileLine
+          wordLine={wordLine}
+          key={i}
+          revealing={
+            i === wordle.currentInputLine - 1 && wordLine.status === "completed"
+          }
+        />
       ))}
     </div>
   );

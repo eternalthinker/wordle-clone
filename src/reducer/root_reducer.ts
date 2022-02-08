@@ -160,24 +160,6 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         gameState = "fail";
       }
 
-      // Add toasts if game has ended
-      let toasts = state.toasts;
-      const message = getFinalMessage(
-        gameState,
-        currentInputLine,
-        wordle.solution
-      );
-      if (message != null) {
-        toasts = [
-          {
-            id: generateToastId(),
-            content: message,
-            duration: 3000,
-          },
-          ...toasts,
-        ];
-      }
-
       const constraints = getConstraints(wordLines, state.gameMode);
 
       const newWordle = {
@@ -196,8 +178,31 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
         ...state,
         wordle: newWordle,
         constraints,
+      };
+    }
+    case "game_finish": {
+      const { wordle } = state;
+      // Add toast for game end
+      let toasts = state.toasts;
+      const message = getFinalMessage(
+        wordle.gameState,
+        wordle.currentInputLine,
+        wordle.solution
+      );
+      if (message != null) {
+        toasts = [
+          {
+            id: generateToastId(),
+            content: message,
+            duration: 3000,
+          },
+          ...toasts,
+        ];
+      }
+      return {
+        ...state,
         toasts,
-        showShare: gameState !== "inprogress",
+        showShare: true,
       };
     }
     case "theme_change": {

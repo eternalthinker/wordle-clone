@@ -16,6 +16,8 @@
   border: none;
   font-size: 1em;
   padding: 0px;
+  transition-property: all;
+  transition-delay: calc(0.25s * 6);
 }
 
 .absent {

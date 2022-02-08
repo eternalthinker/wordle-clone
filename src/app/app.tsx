@@ -15,14 +15,20 @@ export const Root = () => {
 };
 
 export const App = () => {
-  const { state } = React.useContext(RootContext);
-  const { theme } = state;
+  const { state, dispatch } = React.useContext(RootContext);
+  const { theme, wordle } = state;
+
+  React.useEffect(() => {
+    if (wordle.gameState !== "inprogress") {
+      setTimeout(() => dispatch({ type: "game_finish" }), 6 * 0.25 * 1000);
+    }
+  }, [wordle.gameState, dispatch]);
 
   return (
     <div className={styles.appContainer} data-theme={theme}>
       <div className={styles.app}>
         <Header />
-        <ToastContainer/>
+        <ToastContainer />
         <WordleGame />
       </div>
     </div>
