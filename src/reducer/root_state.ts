@@ -127,11 +127,12 @@ export const createInitialState = (): RootState => {
   const storedGameMode: GameMode | null = LocalStorage.getItem(
     "gameMode"
   ) as GameMode;
-  const gameMode = storedGameMode ?? "5letters";
+  const gameMode = storedGameMode ?? "6letters";
   LocalStorage.setItem("gameMode", gameMode);
 
   // Persisted game state
-  const storedWordleStr = LocalStorage.getItem("gameState");
+  const gameStateKey = `gameState_${gameMode}`;
+  const storedWordleStr = LocalStorage.getItem(gameStateKey);
   let storedWordle: Wordle | undefined;
   if (storedWordleStr != null) {
     storedWordle = JSON.parse(storedWordleStr) as Wordle;
@@ -142,7 +143,7 @@ export const createInitialState = (): RootState => {
   // Persisted game state is from an older day
   if (storedWordle?.day !== day) {
     storedWordle = undefined;
-    LocalStorage.removeItem("gameState");
+    LocalStorage.removeItem(gameStateKey);
   }
 
   return {

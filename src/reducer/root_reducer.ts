@@ -189,7 +189,8 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
       };
 
       // Persist game state
-      LocalStorage.setItem("gameState", JSON.stringify(newWordle));
+      const gameStateKey = `gameState_${state.gameMode}`;
+      LocalStorage.setItem(gameStateKey, JSON.stringify(newWordle));
 
       return {
         ...state,
@@ -208,8 +209,6 @@ export const rootReducer = (state: RootState, action: Action): RootState => {
     }
     case "game_mode_change": {
       LocalStorage.setItem("gameMode", action.payload.gameMode);
-      // Clean up in-progress game state
-      LocalStorage.removeItem("gameState");
       return {
         ...createInitialState(),
         gameMode: action.payload.gameMode,

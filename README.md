@@ -2,6 +2,7 @@
 
 # General
 
+- animate hint reveal
 - Next wordle count down
 
 # Stretch
